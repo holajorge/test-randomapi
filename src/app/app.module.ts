@@ -4,15 +4,17 @@ import {HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { ListUsersComponent } from './components/list-users/list-users.component';
+
+import { PagesModule } from './pages/pages.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ListUsersComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -20,8 +22,9 @@ import { ListUsersComponent } from './components/list-users/list-users.component
     AppRoutingModule,
     BrowserAnimationsModule, // required animations module
     ToastrModule.forRoot(), 
-
-    HttpClientModule
+    NgSelectModule,
+    HttpClientModule,
+    PagesModule
 
   ],
   providers: [],

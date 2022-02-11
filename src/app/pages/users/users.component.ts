@@ -4,22 +4,27 @@ import { ToastrService } from 'ngx-toastr';
 import { UsersService } from 'src/app/services/users/users.service';
 
 @Component({
-  selector: 'app-list-users',
-  templateUrl: './list-users.component.html',
+  selector: 'app-users',
+  templateUrl: './users.component.html',
   styles: [
   ]
 })
-export class ListUsersComponent implements OnInit {
+export class UsersComponent implements OnInit {
   flagShowForm:boolean = false;
   userForm: FormGroup;
   listUsers:any;
   newUser:any = [];
   count:number = 0;
+  columns = [{ prop: 'name', name:'Name'  }, { prop: 'age',name: 'Age' }, { prop: 'sex', name: 'Sex' }, { prop: 'phone', name: 'Phone' }];
+  entries:number=10
+  sexsLabel = [
+    { id: 1, name: 'Famele' },
+    { id: 2, name: 'Male' },
+];
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
     private _userService: UsersService
-
   ) { 
     this.userForm = this.fb.group({
       name: ['', Validators.required],
@@ -33,25 +38,28 @@ export class ListUsersComponent implements OnInit {
     this.getUsers();
   }
   getUsers(){
-    this._userService.getUsers().then( (res:any) =>{
-      console.log(res.response['results']);
-      this.listUsers = res.response['results']
-      console.log(this.listUsers);
+    this._userService.getUsers().subscribe( 
+      (res:any) =>{
 
-      if(localStorage.getItem('users')){
-        let hola:any = localStorage.getItem('users');
-        let usersLocal = JSON.parse(hola);
-        for (let index = 0; index <= usersLocal.length-1; index++) {
-          this.listUsers.push(usersLocal[index])
-        }        
-      }
-      console.log(this.listUsers);
+        this.listUsers = res
 
-
-    }).catch(err=>{
-
-      console.log(err);
-    });
+        if(localStorage.getItem('users')){
+          let users:any = localStorage.getItem('users');
+          let usersLocal = JSON.parse(users);
+          if(this.listUsers){
+            for (let index = 0; index <= usersLocal.length-1; index++) {
+            console.log(usersLocal);              
+                this.listUsers.push(usersLocal[index]);            
+            }        
+          }else{
+            this.listUsers = usersLocal;
+          }          
+        }      
+      }, 
+      (err=>{
+        console.log(err);
+      })
+    )
   }
   newItem(){
     this.flagShowForm = true
@@ -64,16 +72,20 @@ export class ListUsersComponent implements OnInit {
       sex: this.userForm.get('sex')?.value,
       phone: this.userForm.get('phone')?.value
     };
-    this.newUser[this.count] = user;   
+    
+    this.newUser = this.listUsers;
+    this.newUser.push(user);
+    this.listUsers = this.newUser;
 
+    console.log(this.newUser);
+    console.log(this.listUsers);
+    
     localStorage.setItem('users', JSON.stringify(this.newUser));
     this.toastr.success('User register success!', 'OK!');
-    this.count++;
-    this.listUsers.push(user);
-    this.userForm.reset();
 
+    this.userForm.reset();
+    this.flagShowForm = false;
     
-    console.log(this.listUsers);
   }
   cancelAdd(){
     this.flagShowForm = false;
@@ -82,4 +94,5 @@ export class ListUsersComponent implements OnInit {
   randon(){
     return  Math.floor(Math.random() * 100);
   }
+
 }

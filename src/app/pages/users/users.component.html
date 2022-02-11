@@ -5,7 +5,7 @@
         <div class="col-lg-8 offset-lg-2">
             <div class="card">
                 <div class="card-body ">
-                    <span class="titulo">List of Users</span>
+                    <span class="titulo">List Persons</span>
                     <button class="btn btn-success float-end" 
                         (click)="newItem()" >New</button>
 
@@ -36,7 +36,7 @@
         <div class="col-lg-6 offset-lg-3">
             <div class="card">
                 <div class="card-body text-center">
-                    <span class="titulo">New User</span>
+                    <span class="titulo">New Person</span>
                     <form [formGroup]="userForm" class="mt-3" (ngSubmit)="addUser()">
                         
                         <div class="mb-3">
@@ -48,30 +48,36 @@
                             </div>
                         </div>
                         <div class="mb-3">
-                            <input type="text" formControlName="age"
+                            
+                            <input type="number" formControlName="age"
                                 class="form-control form-control-lg" placeholder="Age">
                             <div class="text-danger" 
                                 *ngIf="userForm.get('age')?.hasError('required') && userForm.get('age')?.touched">
                                 <span>The age of user <strong>is required</strong></span>
-                                
                             </div>
                         </div>
                         <div class="mb-3">
-                            <input type="text" formControlName="sex"
-                                class="form-control form-control-lg" placeholder="sex">
+                            <label for="">Choose Sex</label>
+                            <select formControlName="sex"  class="form-control form-control-lg">
+                                <option value="Male" selected>Male</option>
+                                <option value="Famele">Famele</option>
+                            </select>
+                            <!-- <input type="text" 
+                                class="form-control form-control-lg" placeholder="sex"> -->
                             <div class="text-danger" 
                                 *ngIf="userForm.get('sex')?.hasError('required') && userForm.get('sex')?.touched">
                                 <span>The sex of user <strong>is required</strong></span>
                                 
                             </div>
                         </div>
+
                         <div class="mb-3">
                             <input type="number" formControlName="phone"
                                 class="form-control form-control-lg" placeholder="phone">
                         </div>
                         <div class="mb-3">
-                            <button (click)="cancelAdd()"  class="btn btn-secondary btn-lg float-start">Cancelar</button>
-                            <button type="submit" [disabled]="userForm.invalid" class="btn btn-success btn-lg float-end">Aceptar</button>
+                            <button (click)="cancelAdd()"  class="btn btn-secondary btn-lg float-start">Cancel</button>
+                            <button type="submit" [disabled]="userForm.invalid" class="btn btn-success btn-lg float-end">Save</button>
                         </div>
                     </form>
                 </div>
